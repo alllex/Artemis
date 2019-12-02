@@ -201,11 +201,13 @@ public class TextAssessmentResource extends AssessmentResource {
      * Splits the TextSubmission corresponding to a resultId into TextBlocks.
      * The TextBlocks get a suggested feedback if automatic assessment is enabled and feedback available
      *
+     * @deprecated Text Blocks should be returned with Submission.
      * @param resultId the resultId the which needs TextBlocks
      * @return 200 Ok if successful with the result, belonging to the TextBlocks as body, but sensitive information are filtered out
      * @throws EntityNotFoundException if the corresponding Exercise isn't a TextExercise
      * @throws AccessForbiddenException if current user is not at least teaching assistant in the given exercise
      */
+    @Deprecated(since = "3.9.5")
     @GetMapping("/result/{resultId}/with-textblocks")
     @PreAuthorize("hasAnyRole('TA', 'INSTRUCTOR', 'ADMIN')")
     public ResponseEntity<Result> getResultWithPredefinedTextblocks(@PathVariable Long resultId) throws EntityNotFoundException, AccessForbiddenException {

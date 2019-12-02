@@ -8,6 +8,8 @@ import { StudentParticipation } from 'app/entities/participation';
 import { Feedback } from 'app/entities/feedback';
 import * as moment from 'moment';
 import { ComplaintResponse } from 'app/entities/complaint-response';
+import { TextBlock } from 'app/entities/text-block/text-block.model';
+import { TextBlockRef } from 'app/entities/text-assessments/text-block-ref.model';
 
 type EntityResponseType = HttpResponse<Result>;
 
@@ -56,6 +58,9 @@ export class TextAssessmentsService {
         return this.http.get<StudentParticipation>(`${this.resourceUrl}/submission/${submissionId}`).pipe(
             // Wire up Result and Submission
             tap((sp: StudentParticipation) => (sp.submissions[0].result = sp.results[0])),
+
+            // Make sure Feedbacks Array is initialized
+            tap((sp: StudentParticipation) => (sp.results[0].feedbacks = sp.results[0].feedbacks || [])),
         );
     }
 
@@ -85,5 +90,15 @@ export class TextAssessmentsService {
 
     private convertItemFromServer(result: Result): Result {
         return Object.assign({}, result);
+    }
+
+    public static matchBlocksWithFeedbacks(blocks: TextBlock[], feedbacks: Feedback[]): TextBlockRef[] {
+        return blocks.map(
+            (block: TextBlock) =>
+                new TextBlockRef(
+                    block,
+                    feedbacks.find(({ reference }) => block.id === reference),
+                ),
+        );
     }
 }

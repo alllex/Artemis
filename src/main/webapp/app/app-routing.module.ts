@@ -22,6 +22,10 @@ const LAYOUT_ROUTES: Routes = [navbarRoute, ...errorRoute];
                     path: 'account',
                     loadChildren: () => import('./account/account.module').then(m => m.ArtemisAccountModule),
                 },
+                {
+                    path: 'text-submission/:submissionId/assessment',
+                    loadChildren: () => import('./text-submission-assessment/text-submission-assessment.module').then(m => m.ArtemisTextSubmissionAssessmentModule),
+                },
             ],
             { useHash: true, enableTracing: false },
         ),
